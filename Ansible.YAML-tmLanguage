@@ -2,7 +2,7 @@
 ---
 name: Ansible
 scopeName: source.ansible
-fileTypes: [ansible]
+fileTypes: [yml]
 uuid: bdbdd0f8-6808-4d09-a51a-c2d8b7aec0a1
 
 patterns:
