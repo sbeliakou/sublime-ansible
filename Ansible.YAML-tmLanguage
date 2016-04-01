@@ -1,0 +1,86 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Ansible1
+scopeName: source.ansible
+fileTypes: [ansible]
+uuid: bdbdd0f8-6808-4d09-a51a-c2d8b7aec0a1
+
+patterns:
+- include: '#comment'
+- include: '#task'
+- include: '#string'
+- include: '#parameter'
+- include: '#caption'
+- include: '#illegal'
+
+#######################################
+
+repository:
+  comment:
+    match: \ *#.*
+    name: comment.line.number-sign.yaml-tmlanguage
+
+  # caption:
+  #   # name: string.quoted.double.ansible
+  #   match: ((name|include|include_vars)\:)\s+(.*)
+  #   captures:
+  #     '1': {name: keyword.other.name.yaml-tmlanguage}
+  #     '2': {name: keyword.other.name.yaml-tmlanguage}
+  #     '3': {name: string.quoted.double.ansible}
+
+  tag: 
+    name: keyword.other.tag.ansible
+    match: \ *\w+[:]
+
+  text:
+    begin: \||\>
+    end: ^\ *$
+    name: string.quoted.double.ansible
+    patterns:
+    - include: '#variable'
+
+  task:
+    name: meta.name.yaml-tmlanguage
+    begin: ^ *
+    end: $
+    patterns:
+    - include: '#string'
+    - include: '#parameter'
+    - include: '#variable'
+    - include: '#tag'
+    - include: '#singleValue'
+    - include: '#comment'
+    - include: '#text'
+    - include: '#number'
+    - include: '#illegal'
+
+  variable:
+    name: storage.type.ansible
+    match: (\{\{ *[^\{\}]+ *\}\})|(\$\{[^\{\}]+\})
+
+  string:
+    name: variable.parameter.ansible
+    begin: (\"|\')
+    end: (\1)
+    patterns:
+    - include: '#variable'
+
+  number:
+    name: constant.numeric.ansible
+    match: \d+
+
+  parameter:
+    name: meta.parameter.yaml-tmlanguage
+    begin: \b(\w+)=
+    beginCaptures:
+      '1': {name: entity.other.attribute-name.yaml-tmlanguage}
+    end: (\"|\')?(\s|$)
+    patterns:
+    - include: '#string'
+    - include: '#variable'
+    - name: constant.other.ansible
+      match: .
+
+  illegal:
+    name: invalid.illegal.unrecognized.yaml-tmlanguage
+    match: ^\t+|\:\s+\{
