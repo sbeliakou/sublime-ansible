@@ -1,6 +1,6 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 ---
-name: Ansible1
+name: Ansible
 scopeName: source.ansible
 fileTypes: [ansible]
 uuid: bdbdd0f8-6808-4d09-a51a-c2d8b7aec0a1

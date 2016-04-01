@@ -7,7 +7,7 @@
 		<string>ansible</string>
 	</array>
 	<key>name</key>
-	<string>Ansible1</string>
+	<string>Ansible</string>
 	<key>patterns</key>
 	<array>
 		<dict>
