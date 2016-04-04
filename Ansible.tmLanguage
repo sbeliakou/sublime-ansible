@@ -50,6 +50,36 @@
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>bool</key>
+		<dict>
+			<key>match</key>
+			<string>\b(yes|no|true|false|True|False)\b</string>
+			<key>name</key>
+			<string>entity.other.inherited-class.ansible</string>
+		</dict>
+		<key>caption</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.ansible</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tag.ansible</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.ansible</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(-? *[^{}] +)(name:)\ +(.*)</string>
+		</dict>
 		<key>comment</key>
 		<dict>
 			<key>match</key>
@@ -69,10 +99,28 @@
 			<key>name</key>
 			<string>invalid.illegal.unrecognized.yaml-tmlanguage</string>
 		</dict>
+		<key>includeOrHandler</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.tag.ansible</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.ansible</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(include:|register:)\ +(.*)</string>
+		</dict>
 		<key>list</key>
 		<dict>
 			<key>match</key>
-			<string>\s*-\s*[\w0-9_-]+$</string>
+			<string>\s*-\s*[.+\w0-9_-]+$</string>
 			<key>name</key>
 			<string>support.constant.ansible</string>
 		</dict>
@@ -97,8 +145,6 @@
 			</dict>
 			<key>end</key>
 			<string>(\"|\')?(\s|^\s*$)</string>
-			<key>name</key>
-			<string>meta.parameter.yaml-tmlanguage</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -112,6 +158,10 @@
 				<dict>
 					<key>include</key>
 					<string>#regex</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bool</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -154,13 +204,23 @@
 			<string>^ *</string>
 			<key>end</key>
 			<string>$</string>
-			<key>name</key>
-			<string>meta.name.yaml-tmlanguage</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#comment</string>
+					<string>#caption</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#includeOrHandler</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bool</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable_bash</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -196,58 +256,28 @@
 				</dict>
 			</array>
 		</dict>
-		<key>text</key>
+		<key>variable</key>
 		<dict>
 			<key>begin</key>
-			<string>^( *)([- ])( +)(\w+\:)\s*[\|&gt;]\s*\n</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>none.ansible</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.tag.ansible</string>
-				</dict>
-			</dict>
+			<string>\$?\{\{ *</string>
 			<key>end</key>
-			<string>^(\1.\3)(\w+\:)|^ *$</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>text.ansible</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.tag.ansible</string>
-				</dict>
-			</dict>
+			<string>\s*\}\}</string>
 			<key>name</key>
-			<string>string.quoted.double.ansible</string>
+			<string>storage.type.ansible</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#variable</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#text</string>
+					<string>#string</string>
 				</dict>
 			</array>
 		</dict>
-		<key>variable</key>
+		<key>variable_bash</key>
 		<dict>
 			<key>match</key>
-			<string>\{\{ *[^\{\}]+ *\}\}</string>
+			<string>\$\{?\w+\}?</string>
 			<key>name</key>
-			<string>storage.type.ansible</string>
+			<string>entity.other.inherited-class.ansible</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>
