@@ -5,6 +5,7 @@
 	<key>fileTypes</key>
 	<array>
 		<string>yml</string>
+		<string>ansible</string>
 	</array>
 	<key>name</key>
 	<string>Ansible</string>
@@ -12,7 +13,15 @@
 	<array>
 		<dict>
 			<key>include</key>
+			<string>#escape</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#comment</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#list</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -40,21 +49,33 @@
 		<key>comment</key>
 		<dict>
 			<key>match</key>
-			<string>\ *#.*</string>
+			<string>(\ +|^)#.*</string>
 			<key>name</key>
-			<string>comment.line.number-sign.yaml-tmlanguage</string>
+			<string>comment.line.yaml-tmlanguage</string>
+		</dict>
+		<key>escape</key>
+		<dict>
+			<key>match</key>
+			<string>(\\[tn"'0-9])</string>
 		</dict>
 		<key>illegal</key>
 		<dict>
 			<key>match</key>
-			<string>^\t+|\:\s+\{</string>
+			<string>^\t+|^\s*\}</string>
 			<key>name</key>
 			<string>invalid.illegal.unrecognized.yaml-tmlanguage</string>
+		</dict>
+		<key>list</key>
+		<dict>
+			<key>match</key>
+			<string>\s*-\s*[\w0-9_-]+$</string>
+			<key>name</key>
+			<string>support.constant.ansible</string>
 		</dict>
 		<key>number</key>
 		<dict>
 			<key>match</key>
-			<string>\d+</string>
+			<string>\b\d+\b</string>
 			<key>name</key>
 			<string>constant.numeric.ansible</string>
 		</dict>
@@ -71,7 +92,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(\"|\')?(\s|$)</string>
+			<string>(\"|\')?(\s|^\s*$)</string>
 			<key>name</key>
 			<string>meta.parameter.yaml-tmlanguage</string>
 			<key>patterns</key>
@@ -83,6 +104,10 @@
 				<dict>
 					<key>include</key>
 					<string>#variable</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#regex</string>
 				</dict>
 				<dict>
 					<key>match</key>
@@ -97,7 +122,7 @@
 			<key>begin</key>
 			<string>(\"|\')</string>
 			<key>end</key>
-			<string>(\1)</string>
+			<string>\1|^\s*$</string>
 			<key>name</key>
 			<string>variable.parameter.ansible</string>
 			<key>patterns</key>
@@ -106,12 +131,16 @@
 					<key>include</key>
 					<string>#variable</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#escape</string>
+				</dict>
 			</array>
 		</dict>
 		<key>tag</key>
 		<dict>
 			<key>match</key>
-			<string>\ *\w+[:]</string>
+			<string>\ *[\w_-]+[:]</string>
 			<key>name</key>
 			<string>keyword.other.tag.ansible</string>
 		</dict>
@@ -125,6 +154,10 @@
 			<string>meta.name.yaml-tmlanguage</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#string</string>
@@ -143,19 +176,15 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#singleValue</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comment</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#text</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#number</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -166,7 +195,7 @@
 		<key>text</key>
 		<dict>
 			<key>begin</key>
-			<string>\||\&gt;</string>
+			<string>\|\s*\n</string>
 			<key>end</key>
 			<string>^\ *$</string>
 			<key>name</key>
@@ -182,7 +211,7 @@
 		<key>variable</key>
 		<dict>
 			<key>match</key>
-			<string>(\{\{ *[^\{\}]+ *\}\})|(\$\{[^\{\}]+\})</string>
+			<string>\{\{ *[^\{\}]+ *\}\}</string>
 			<key>name</key>
 			<string>storage.type.ansible</string>
 		</dict>

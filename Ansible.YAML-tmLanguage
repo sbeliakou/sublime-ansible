@@ -2,11 +2,13 @@
 ---
 name: Ansible
 scopeName: source.ansible
-fileTypes: [yml]
+fileTypes: [yml,ansible]
 uuid: bdbdd0f8-6808-4d09-a51a-c2d8b7aec0a1
 
 patterns:
+- include: '#escape'
 - include: '#comment'
+- include: '#list'
 - include: '#task'
 - include: '#string'
 - include: '#parameter'
@@ -17,70 +19,74 @@ patterns:
 
 repository:
   comment:
-    match: \ *#.*
-    name: comment.line.number-sign.yaml-tmlanguage
+    match: (\ +|^)#.*
+    name: comment.line.yaml-tmlanguage
 
-  # caption:
-  #   # name: string.quoted.double.ansible
-  #   match: ((name|include|include_vars)\:)\s+(.*)
-  #   captures:
-  #     '1': {name: keyword.other.name.yaml-tmlanguage}
-  #     '2': {name: keyword.other.name.yaml-tmlanguage}
-  #     '3': {name: string.quoted.double.ansible}
-
-  tag: 
+  tag:
     name: keyword.other.tag.ansible
-    match: \ *\w+[:]
+    # name: support.constant.ansible
+    match: \ *[\w_-]+[:]
 
   text:
-    begin: \||\>
+    begin: \|\s*\n
     end: ^\ *$
     name: string.quoted.double.ansible
     patterns:
     - include: '#variable'
+
+  variable:
+    name: storage.type.ansible
+    match: \{\{ *[^\{\}]+ *\}\}
+
+  list:
+    name: support.constant.ansible
+    match: \s*-\s*[\w0-9_-]+$
 
   task:
     name: meta.name.yaml-tmlanguage
     begin: ^ *
     end: $
     patterns:
+    - include: '#comment'
+    # - include: '#escape'
     - include: '#string'
     - include: '#parameter'
     - include: '#variable'
+    # - include: '#regex'
     - include: '#tag'
-    - include: '#singleValue'
-    - include: '#comment'
     - include: '#text'
     - include: '#number'
+    - include: '#comment'
     - include: '#illegal'
 
-  variable:
-    name: storage.type.ansible
-    match: (\{\{ *[^\{\}]+ *\}\})|(\$\{[^\{\}]+\})
+  escape:
+    match: (\\[tn"'0-9])
 
   string:
     name: variable.parameter.ansible
     begin: (\"|\')
-    end: (\1)
+    end: \1|^\s*$
     patterns:
     - include: '#variable'
+    - include: '#escape'
 
   number:
     name: constant.numeric.ansible
-    match: \d+
+    match: \b\d+\b
 
   parameter:
     name: meta.parameter.yaml-tmlanguage
     begin: \b(\w+)=
     beginCaptures:
       '1': {name: entity.other.attribute-name.yaml-tmlanguage}
-    end: (\"|\')?(\s|$)
+    end: (\"|\')?(\s|^\s*$)
     patterns:
     - include: '#string'
     - include: '#variable'
+    - include: '#regex'
     - name: constant.other.ansible
       match: .
 
   illegal:
     name: invalid.illegal.unrecognized.yaml-tmlanguage
-    match: ^\t+|\:\s+\{
+    match: ^\t+|^\s*\}
