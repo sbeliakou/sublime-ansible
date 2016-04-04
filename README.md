@@ -12,7 +12,7 @@ With color scheme Monokai
 ### Manual
 Clone the repository in your Sublime Text "Packages" directory:
 
-    git clone https://github.com/clifford-github/sublime-ansible.git Ansible
+    git clone https://github.com/sbeliakou/sublime-ansible.git Ansible
 
 The "Packages" directory is located at:
 
