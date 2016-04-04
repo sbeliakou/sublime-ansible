@@ -127,7 +127,7 @@
 		<key>number</key>
 		<dict>
 			<key>match</key>
-			<string>\b\d+\b</string>
+			<string>\b\-?\d+\b</string>
 			<key>name</key>
 			<string>constant.numeric.ansible</string>
 		</dict>
